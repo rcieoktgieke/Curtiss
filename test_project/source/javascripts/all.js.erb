@@ -25,6 +25,7 @@ function replaceImageWhenLoaded(imageObject, thumb) {
 }
 
 function swapOverlayImage(event) {
+  event.stopPropagation();
   var newOverlayImage = event.target.cloneNode();
   document.getElementById("gallery-overlay-image-div").innerHTML = "";
   setOverlayImage(newOverlayImage);
@@ -54,10 +55,13 @@ function loadGalleryImages(galleryFilenames) {
 }
 
 function openOverlay(event) {
+  event.stopPropagation();
   galleryOverlayDiv.style.zIndex = "1";
   galleryOverlayDiv.style.animationFillMode = "forwards";
   galleryOverlayDiv.style.animationDuration = ".5s";
   galleryOverlayDiv.style.animationName = "overlay-fadein";
+
+  document.getElementById("overlay-thumb-div").focus();
 
   var overlayImage = event.target.cloneNode();
   setOverlayImage(overlayImage);
@@ -118,5 +122,6 @@ var galleryFilenames = [ //assemble matrix of filenames from middleman config va
 //This is where the script begins to interact with the page
 window.onload = function () { //Wait for window to load
   galleryOverlayDiv = document.getElementById("gallery-overlay-div");
+  galleryOverlayDiv.addEventListener("click", function () { closeOverlay() });
   window.document.body.onload = loadGalleryImages(galleryFilenames); //Wait for body to load, then call function to load gallery images
 }
