@@ -6,10 +6,36 @@ require "rmagick"
 GALLERY_FOLDER = "gallery"
 THUMBS_FOLDER = "thumbs"
 TOTAL_WIDTH = 960
-IMAGES_PER_ROW = 5
+IMAGES_PER_ROW = 4
 IMAGE_MARGINS = 10
 WIDTH_ADJUSTMENT = 2.0 #to account for rounding
 
+gallery = [
+  [
+      "IMG_0554.jpg",
+      "17251780251_c6e35d0eb4_o-2.jpg",
+      "IMG_8764.JPG",
+      "wakeboarding.jpg",
+  ],
+  [
+      "IMG_0671.jpg",
+      "17065993009_ea85d43d54_o.jpg",
+      "DSCF0045.JPG",
+      "IMG_0578.jpg",
+  ],
+  [
+      "18361018_race_0.35907597383358725.display.jpg",
+      "ScreenShot2016-03-14at15.12.412.png",
+      "IMG_0571.jpg",
+      "IMG_2823.jpg",
+  ],
+  [
+      "EricWeber.jpeg",
+      "IMG_2647.jpg",
+  ],
+];
+
+=begin
 gallery = []
 filenames = Dir.entries("source/images/" + GALLERY_FOLDER).select {|filename| filename != "." and filename != ".." and filename != THUMBS_FOLDER }
 
@@ -96,13 +122,15 @@ gallery.each do |row|
     puts filename
   end
 end
-
+=end
 configure :build do
   config[:gallery] = gallery
   config[:GALLERY_FOLDER] = GALLERY_FOLDER
   config[:THUMBS_FOLDER] = THUMBS_FOLDER
   config[:GALLERY_WIDTH] = TOTAL_WIDTH
   config[:IMAGE_MARGINS] = IMAGE_MARGINS
+  config[:WIDTH_ADJUSTMENT] = WIDTH_ADJUSTMENT
+  config[:OVERLAY_THUMB_HEIGHT] = 100
 end
 
 # Per-page layout changes:
