@@ -1,111 +1,61 @@
+#This is the Middleman config file. The only changes are in the first handful of lines. 
+
 ###
 # Page options, layouts, aliases and proxies
 ###
-require "rmagick"
 
-GALLERY_FOLDER = "gallery"
-THUMBS_FOLDER = "thumbs"
-TOTAL_WIDTH = 960
-IMAGES_PER_ROW = 4
-IMAGE_MARGINS = 10
-WIDTH_ADJUSTMENT = 2.0 #to account for rounding
+require "curtiss_image_process.rb" #This imports the Curtiss's image processing script
 
-gallery = []
-filenames = Dir.entries("source/images/" + GALLERY_FOLDER).select {|filename| filename != "." and filename != ".." and filename != THUMBS_FOLDER }
+set :relative_links, true #This tells Middleman to make all links relative. This is useful when deploying your page to any location other than the root of your filesystem, so I turned it on.
 
-index = 0
-while index + IMAGES_PER_ROW <= filenames.length do
-  minHeight = nil
-  for i in index..index + IMAGES_PER_ROW - 1
-    filename = filenames[i]
-    currentImage = Magick::ImageList.new("source/images/" + GALLERY_FOLDER + "/" + filename)
-    currentHeight = currentImage.first.rows
-    minHeight = currentHeight if (minHeight == nil or currentHeight < minHeight)
-  end
+gallery = [] #This will become a matrix of filenames, where a row in the matrix represents a row in the gallery, and each element is the filename of the appropriate image.
+GALLERY_FOLDER = "gallery" #This is the name of the folder (or path to the folder) where all images to be processed and used by Curtiss will be stored.
+THUMBS_FOLDER = "thumbs" #This is the name of the folder witihin the GALLERY_FOLDER folder where thumbnails will be saved.
+TOTAL_WIDTH = 960 #This is the width (in pixel) which Curtiss will make each row fit within. It also sets a number of style attributes from elsewhere in Middleman, where it is accessed by the config[:TOTAL_WIDTH] variable (see below).
+IMAGES_PER_ROW = 4 #This is the number of images Curtiss will attempt to place on each row. If the imagesprocessed are not wide enough, it will add to this number until it fills the row. This is also accessed elsewhere in Middleman.
+IMAGE_MARGINS = 10 #This is the number of pixels Curtiss will leave for margins BETWEEN images. It accounts for no margins around the gallery as a whole. It subtracts the number of pixels for margins times the ACTUAL number of images in the row (can be different than IMAGES_PER_ROW, as discussed above) from the TOTAL_WIDTH, and scales images in each row to fit that calculated width.
+WIDTH_ADJUSTMENT = 2.0 #This is a number of pixels left blank on each row by default. Try adjusting this if images are wrapping before the end of their rows. The reason for this wiggle room is because pixel counts must be integers, and when rounding from the calculations used to scale images, there is a possibility of more pixels in a row than the TOTAL_WIDTH.
+OVERLAY_THUMB_HEIGHT = 100 #This is the height of the list of thumbnails used in the overlay. This is not actually used by the image processing script, but it is the only other cofigurable variable used by the front end.
 
-  width = 0.0
-  for i in index..index + IMAGES_PER_ROW - 1
-    filename = filenames[i]
-    currentImage = Magick::ImageList.new("source/images/" + GALLERY_FOLDER + "/" + filename)
-    currentWidth = currentImage.first.columns
-    currentHeight = currentImage.first.rows
-    width += currentWidth * minHeight/currentHeight 
-  end
+#curtiss_init(gallery, GALLERY_FOLDER, THUMBS_FOLDER, TOTAL_WIDTH, IMAGES_PER_ROW, IMAGE_MARGINS, WIDTH_ADJUSTMENT) #This function wraps the entirety of the curtiss_image_process.rb script. The only effect is has on the rest of this script is by initializing the gallery matrix.
 
-  imagesToAdd = 0
-  while width < TOTAL_WIDTH
-    imagesToAdd += 1
-    filename = filenames[index + IMAGES_PER_ROW + imagesToAdd]
-    currentImage = Magick::ImageList.new("source/images/" + GALLERY_FOLDER + "/" + filename)
-    currentWidth = currentImage.first.columns
-    currentHeight = currentImage.first.rows
-    width += currentWidth * minHeight/currentHeight 
-  end
 
-  widthRatio = (TOTAL_WIDTH - WIDTH_ADJUSTMENT - (IMAGES_PER_ROW + imagesToAdd - 1) * IMAGE_MARGINS)/width
+gallery = [
+  [
+      "IMG_0554.jpg",
+      "17251780251_c6e35d0eb4_o-2.jpg",
+      "IMG_8764.JPG",
+      "wakeboarding.jpg",
+  ],
+  [
+      "IMG_0671.jpg",
+      "17065993009_ea85d43d54_o.jpg",
+      "DSCF0045.JPG",
+      "IMG_0578.jpg",
+  ],
+  [
+      "18361018_race_0.35907597383358725.display.jpg",
+      "ScreenShot2016-03-14at15.12.412.png",
+      "IMG_0571.jpg",
+      "IMG_2823.jpg",
+  ],
+  [
+      "EricWeber.jpeg",
+      "IMG_2647.jpg",
+  ],
+];
 
-  row = []
-  for i in index..index + IMAGES_PER_ROW + imagesToAdd - 1
-    filename = filenames[i]
-    currentImage = Magick::ImageList.new("source/images/" + GALLERY_FOLDER + "/" + filename)
-    currentHeight = currentImage.first.rows
-    scaleRatio = widthRatio * minHeight/currentHeight
-    thumbnail = currentImage.scale(scaleRatio)
-    thumbnail.write("source/images/" + GALLERY_FOLDER + "/" + THUMBS_FOLDER + "/" + filename)
-    row.push(filename)
-  end
-  gallery.push(row)
-
-  index = index + IMAGES_PER_ROW + imagesToAdd
-end
-
-if index < filenames.length
-  for i in index..filenames.length - 1
-    filename = filenames[i]
-    currentImage = Magick::ImageList.new("source/images/" + GALLERY_FOLDER + "/" + filename)
-    currentHeight = currentImage.first.rows
-    minHeight = currentHeight if (minHeight == nil or currentHeight < minHeight)
-  end
-
-  width = 0.0
-  for i in index..filenames.length - 1
-    filename = filenames[i]
-    currentImage = Magick::ImageList.new("source/images/" + GALLERY_FOLDER + "/" + filename)
-    currentWidth = currentImage.first.columns
-    currentHeight = currentImage.first.rows
-    width += currentWidth * minHeight/currentHeight
-  end
-
-  widthRatio = (TOTAL_WIDTH - WIDTH_ADJUSTMENT - (filenames.length - index - 1) * IMAGE_MARGINS)/width
-
-  row = []
-  for i in index..filenames.length - 1
-    filename = filenames[i]
-    currentImage = Magick::ImageList.new("source/images/" + GALLERY_FOLDER + "/" + filename)
-    currentHeight = currentImage.first.rows
-    scaleRatio = widthRatio * minHeight/currentHeight
-    thumbnail = currentImage.scale(scaleRatio)
-    thumbnail.write("source/images/" + GALLERY_FOLDER + "/" + THUMBS_FOLDER + "/" + filename)
-    row.push(filename)
-  end
-  gallery.push(row)
-end
-
-gallery.each do |row|
-  row.each do |filename|
-    puts filename
-  end
-end
-
-configure :build do
+configure :build do #This is Middleman's method of passing variable from this script to the rest of the project. In the front end source code, the following will be accessed in this format: config[:VARIABLE_NAME].
   config[:gallery] = gallery
   config[:GALLERY_FOLDER] = GALLERY_FOLDER
   config[:THUMBS_FOLDER] = THUMBS_FOLDER
   config[:GALLERY_WIDTH] = TOTAL_WIDTH
   config[:IMAGE_MARGINS] = IMAGE_MARGINS
   config[:WIDTH_ADJUSTMENT] = WIDTH_ADJUSTMENT
-  config[:OVERLAY_THUMB_HEIGHT] = 100
+  config[:OVERLAY_THUMB_HEIGHT] = OVERLAY_THUMB_HEIGHT
 end
+
+#No further details in this file differ from the default created by Middleman... I think.
 
 # Per-page layout changes:
 #
@@ -138,12 +88,6 @@ end
 #     "Helping"
 #   end
 # end
-
-helpers do
-  def get_gallery
-    return @gallery
-  end
-end 
 
 # Build-specific configuration
 configure :build do
