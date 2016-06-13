@@ -24,4 +24,4 @@ The number of pixels left blank on each row by default. Try adjusting this if im
 The height of the list of thumbnails used in the overlay.
 The config.rb script calls a function which wraps the entirety of the curtiss\_image\_process.rb script.
 A number of variables are passed from the config.rb script to the front end source code using the config[] variable.
-
+The index.html.erb assigns an index to each image in the gallery according to the order in which they appear in the gallery matrix. This index is used by the JavaScript to swap out each thumbnail for its higher-res counterpart.
