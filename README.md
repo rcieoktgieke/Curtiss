@@ -25,3 +25,5 @@ The height of the list of thumbnails used in the overlay.
 The config.rb script calls a function which wraps the entirety of the curtiss\_image\_process.rb script.
 A number of variables are passed from the config.rb script to the front end source code using the config[] variable.
 The index.html.erb assigns an index to each image in the gallery according to the order in which they appear in the gallery matrix. This index is used by the JavaScript to swap out each thumbnail for its higher-res counterpart.
+In the JavaScript, calling addToOverlayThumbs() from loadGalleryImages() creates placeholders (in a way) for the thumbnail images in the overlay, but leaves the loading of these thumbnails visible (in some cases) to the user. Calling addToOverlayThumbs() from replaceImageWhenLoaded() results in dynamic insertions to the overlay thumbnail list, but only renders thumbnails when they are fully loaded.
+The gallery-container-div div wraps all gallery content (not the overlay), and thus can be safely moved to any location on the pgae, and galley content can be expected to follow it.
