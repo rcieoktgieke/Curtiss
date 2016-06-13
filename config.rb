@@ -17,33 +17,7 @@ IMAGE_MARGINS = 10 #This is the number of pixels Curtiss will leave for margins 
 WIDTH_ADJUSTMENT = 2.0 #This is a number of pixels left blank on each row by default. Try adjusting this if images are wrapping before the end of their rows. The reason for this wiggle room is because pixel counts must be integers, and when rounding from the calculations used to scale images, there is a possibility of more pixels in a row than the TOTAL_WIDTH.
 OVERLAY_THUMB_HEIGHT = 100 #This is the height of the list of thumbnails used in the overlay. This is not actually used by the image processing script, but it is the only other cofigurable variable used by the front end.
 
-#curtiss_init(gallery, GALLERY_FOLDER, THUMBS_FOLDER, TOTAL_WIDTH, IMAGES_PER_ROW, IMAGE_MARGINS, WIDTH_ADJUSTMENT) #This function wraps the entirety of the curtiss_image_process.rb script. The only effect is has on the rest of this script is by initializing the gallery matrix.
-
-
-gallery = [
-  [
-      "IMG_0554.jpg",
-      "17251780251_c6e35d0eb4_o-2.jpg",
-      "IMG_8764.JPG",
-      "wakeboarding.jpg",
-  ],
-  [
-      "IMG_0671.jpg",
-      "17065993009_ea85d43d54_o.jpg",
-      "DSCF0045.JPG",
-      "IMG_0578.jpg",
-  ],
-  [
-      "18361018_race_0.35907597383358725.display.jpg",
-      "ScreenShot2016-03-14at15.12.412.png",
-      "IMG_0571.jpg",
-      "IMG_2823.jpg",
-  ],
-  [
-      "EricWeber.jpeg",
-      "IMG_2647.jpg",
-  ],
-];
+curtiss_init(gallery, GALLERY_FOLDER, THUMBS_FOLDER, TOTAL_WIDTH, IMAGES_PER_ROW, IMAGE_MARGINS, WIDTH_ADJUSTMENT) #This function wraps the entirety of the curtiss_image_process.rb script. The only effect is has on the rest of this script is by initializing the gallery matrix.
 
 configure :build do #This is Middleman's method of passing variable from this script to the rest of the project. In the front end source code, the following will be accessed in this format: config[:VARIABLE_NAME].
   config[:gallery] = gallery
