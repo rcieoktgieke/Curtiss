@@ -1,3 +1,5 @@
+#This is Middleman's automatically generated Gemfile, with the addition of the rmagick gem on the last line.
+
 # If you do not have OpenSSL installed, change
 # the following line to use 'http://'
 source 'https://rubygems.org'
@@ -13,4 +15,4 @@ gem 'middleman', '>= 4.0.0'
 gem 'middleman-livereload'
 gem 'middleman-compass', '>= 4.0.0'
 
-gem 'rmagick'
+gem 'rmagick' #This must be added for the purpose of Curtiss's image processing script. 

@@ -1,18 +1,17 @@
 <!doctype html>
 <html>
+  <!-- This file creates the default wrappers for each page in the Middleman site. In this case, the wrappers are only used by the index.html page, because no others exist. -->
   <head>
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta charset="utf-8">
-    <!--<meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">--> 
+    <!--<meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport"> This is removed to allow mobile browsers to scale their view to show the entire gallery. --> 
 
     <!-- Use title if it's in the page YAML frontmatter -->
-    <title><%= current_page.data.title || "Middleman" %></title>
+    <title><%= current_page.data.title || "Curtiss" %></title>
 
-    <link href='https://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
-
-    <%= stylesheet_link_tag :site %>
-    <%= javascript_include_tag :all %>
-    <%= javascript_include_tag "javascripts/dragscroll-0.0.6/dragscroll.js" %>
+    <%= stylesheet_link_tag :site %> <!-- This imports the site.css.scss.erb file to every page using this layout. -->
+    <%= javascript_include_tag :all %> <!-- This imports the all.js.erb file to every page using this layout. -->
+    <%= javascript_include_tag "javascripts/dragscroll-0.0.6/dragscroll.js" %> <!-- This imports the dragscroll.js file to every page using this layout. -->
   </head>
 
   <body class="<%= page_classes %>">

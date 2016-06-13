@@ -1,3 +1,4 @@
+#This is the original rendition of the Curtiss image-processing script. It is functional, but is missing a number of the nice features present in the Ruby/middleman version, most notably the image margin awareness. Further documentation of this script is likely to be added in the future.
 #!/usr/bin/env python
 import sys
 import os
